@@ -16,7 +16,13 @@ so they are not in this repo: put `Bozon-Regular.otf`, `Bozon-Bold.otf` and
 `Bozon-ExtraBold.otf` in `public/fonts/` before running or deploying. The
 Canva source export is kept out of the repo for the same reason.
 
-Because the fonts are git-ignored, deploy from a machine that has them:
+Pushing to `main` deploys to production through
+`.github/workflows/deploy.yml`. It needs the `VERCEL_TOKEN`, `VERCEL_ORG_ID`
+and `VERCEL_PROJECT_ID` repo secrets. Since the fonts are git-ignored, the
+workflow copies them from the live site (or from the `FONTS_BASE_URL` repo
+variable) and stops if they are missing.
+
+To deploy by hand from a machine that has the fonts:
 
 ```bash
 vercel deploy --prod

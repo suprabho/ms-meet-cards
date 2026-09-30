@@ -1,0 +1,56 @@
+name: Deploy to production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: production-deploy
+  cancel-in-progress: true
+
+env:
+  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  # The licensed Bozon fonts are not in the repo. They are copied from the
+  # site that is already live; override with a FONTS_BASE_URL repo variable.
+  FONTS_BASE_URL: ${{ vars.FONTS_BASE_URL || 'https://ms-meets-cards.vercel.app/fonts' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Fetch fonts
+        run: |
+          mkdir -p public/fonts
+          for f in Bozon-Regular.otf Bozon-Bold.otf Bozon-ExtraBold.otf; do
+            curl --fail --silent --show-error --location "$FONTS_BASE_URL/$f" --output "public/fonts/$f"
+            # Refuse to deploy without real font files (an error page would be tiny or not OpenType).
+            if [ "$(head -c 4 "public/fonts/$f")" != "OTTO" ] || [ "$(wc -c < "public/fonts/$f")" -lt 50000 ]; then
+              echo "::error::$f from $FONTS_BASE_URL is not a valid font file"
+              exit 1
+            fi
+          done
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel project settings
+        run: vercel pull --yes --environment=production --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Build
+        run: vercel build --prod --token="${{ secrets.VERCEL_TOKEN }}"
+
+      - name: Deploy
+        run: vercel deploy --prebuilt --prod --token="${{ secrets.VERCEL_TOKEN }}"
