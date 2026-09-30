@@ -19,11 +19,12 @@ const HEX: [number, number][] = [
 // Visible part of the hexagon: the photo is cover-fitted to this box.
 const PHOTO = { x: 588.96, y: 158.82, w: CARD_W - 588.96, h: 964.54 - 158.82 };
 
+const INTRO = { text: "I’m speaking at", x: 38.18, y: 126.17, size: 55.97 };
 // The logo lockup is drawn at 80% of the Canva size, scaled about its top-left
 // corner (38.18, 168.04); the edition follows it.
 const EDITION = { x: 89.74, y: 378.75, size: 45.07, maxWidth: 530 };
-const NAME = { x: 38.18, lastBaseline: 676.24, size: 86.65, lineHeight: 73.22, maxWidth: 510, maxLines: 3, minSize: 44 };
-const ROLE = { x: 38.18, y: 773.08, size: 53.3, lineHeight: 62, maxWidth: 510, maxLines: 3, minSize: 34, companyGap: 11 };
+const NAME = { x: 38.18, lastBaseline: 676.24, size: 86.65, lineHeight: 73.22, maxWidth: 470, maxLines: 3, minSize: 44 };
+const ROLE = { x: 38.18, y: 773.08, size: 53.3, lineHeight: 62, maxWidth: 470, maxLines: 3, minSize: 34, companyGap: 11 };
 const UNDERLINE = { inset: 6, offset: 18, height: 4 };
 const DATE = { x: 47.94, y: 1038.4, size: 37.18, weight: 400, maxWidth: 700 };
 
@@ -188,6 +189,9 @@ export function drawCard(
 
   ctx.fillStyle = INK;
   ctx.textBaseline = "alphabetic";
+
+  ctx.font = font(400, INTRO.size);
+  ctx.fillText(INTRO.text, INTRO.x, INTRO.y);
 
   const edition = data.edition.toUpperCase();
   ctx.font = font(800, fitSize(ctx, edition, 800, EDITION.size, EDITION.maxWidth));
