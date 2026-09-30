@@ -1,0 +1,12 @@
+node_modules
+.next
+.env*.local
+next-env.d.ts
+.DS_Store
+*.tsbuildinfo
+.vercel
+# cards downloaded while testing
+/merkle-science-meet-*.png
+# licensed fonts and Canva source files stay out of the public repo (see README)
+/public/fonts/*.otf
+/Copy of SPEAKER ANNOUNCEMENT*

@@ -1,0 +1,240 @@
+@font-face {
+  font-family: "Bozon";
+  src: url("/fonts/Bozon-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bozon";
+  src: url("/fonts/Bozon-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Bozon";
+  src: url("/fonts/Bozon-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-display: swap;
+}
+
+:root {
+  --bg: #01062e;
+  --panel: #050d4d;
+  --line: rgba(227, 239, 255, 0.16);
+  --ink: #e3efff;
+  --muted: rgba(227, 239, 255, 0.62);
+  --accent: #2b3bff;
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(120% 80% at 100% 0%, #0010c4 0%, #020a4a 45%, var(--bg) 100%) fixed;
+  color: var(--ink);
+  font-family: "Bozon", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 40px 24px 56px;
+}
+
+header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 20px;
+  margin-bottom: 28px;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 400;
+}
+h1 span {
+  font-weight: 800;
+  margin-right: 12px;
+  padding-right: 14px;
+  border-right: 1px solid var(--line);
+}
+header p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.generator {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: start;
+}
+
+.preview,
+.controls {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+.preview {
+  overflow: hidden;
+}
+.preview canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1350 / 1080;
+  touch-action: pan-y;
+}
+.preview canvas.draggable {
+  cursor: grab;
+  touch-action: none;
+}
+.preview canvas.draggable:active {
+  cursor: grabbing;
+}
+.preview-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  color: var(--muted);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+.controls label,
+.controls .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.controls label > span,
+.controls .field > span {
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+input:not([type="range"]),
+select,
+button {
+  font: inherit;
+  color: var(--ink);
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(227, 239, 255, 0.05);
+}
+input:not([type="range"]),
+select {
+  width: 100%;
+  padding: 13px 14px;
+  font-size: 16px;
+}
+input::placeholder {
+  color: rgba(227, 239, 255, 0.4);
+}
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--ink);
+}
+:is(input, select, button):focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+button {
+  padding: 14px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+button:hover:not(:disabled) {
+  background: rgba(227, 239, 255, 0.12);
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+button.primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #020a4a;
+  font-weight: 800;
+}
+button.primary:hover:not(:disabled) {
+  background: #fff;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px 14px;
+  border-style: dashed;
+  text-align: center;
+  font-weight: 400;
+}
+.dropzone.dropping {
+  background: rgba(227, 239, 255, 0.16);
+  border-color: var(--ink);
+}
+.dropzone small {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.error,
+.hint,
+.privacy {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.error {
+  color: #ffb4b4;
+}
+.hint,
+.privacy {
+  color: var(--muted);
+}
+.hint {
+  text-align: center;
+}
+.privacy {
+  margin-top: 20px;
+}
+
+@media (max-width: 900px) {
+  main {
+    padding: 24px 16px 40px;
+  }
+  .generator {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  h1 span {
+    display: block;
+    border: 0;
+    padding: 0;
+    margin: 0 0 4px;
+  }
+}

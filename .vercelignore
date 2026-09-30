@@ -1,0 +1,8 @@
+# Used instead of .gitignore for `vercel deploy`, so the git-ignored fonts
+# in public/fonts are still uploaded.
+node_modules
+.next
+.env*.local
+*.tsbuildinfo
+/merkle-science-meet-*.png
+/Copy of SPEAKER ANNOUNCEMENT*

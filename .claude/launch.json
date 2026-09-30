@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "ms-meets-cards", "runtimeExecutable": "pnpm", "runtimeArgs": ["dev"], "port": 3500 }
+  ]
+}
