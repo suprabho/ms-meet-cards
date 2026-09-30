@@ -1,7 +1,7 @@
 # Merkle Science Meet — guest card generator
 
 Guests enter their name, role and company, add a photo, and download an
-"I'm going to Merkle Science Meet" card (1350 × 1080, or 2700 × 2160 at 2x).
+"I'm speaking at Merkle Science Meet" card (1350 × 1080, or 2700 × 2160 at 2x).
 The card is drawn on a canvas in the browser; photos are never uploaded.
 
 ```bash
