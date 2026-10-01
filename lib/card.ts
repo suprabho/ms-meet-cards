@@ -19,6 +19,9 @@ const HEX: [number, number][] = [
 // Visible part of the hexagon: the photo is cover-fitted to this box.
 const PHOTO = { x: 588.96, y: 158.82, w: CARD_W - 588.96, h: 964.54 - 158.82 };
 
+// Placeholder silhouette, centred in the visible part of the hexagon.
+const SILHOUETTE = { x: 1000, headY: 470, headR: 118, shoulderY: 650, shoulderW: 520, color: "rgba(0, 20, 160, 0.22)" };
+
 const INTRO = { text: "I’m speaking at", x: 38.18, y: 126.17, size: 55.97 };
 // The logo lockup is drawn at 80% of the Canva size, scaled about its top-left
 // corner (38.18, 168.04); the edition follows it.
@@ -153,6 +156,28 @@ function drawRole(ctx: CanvasRenderingContext2D, role: string, company: string) 
   ctx.restore();
 }
 
+/** Generic head-and-shoulders outline shown in the hexagon until a photo is added. */
+function drawSilhouette(ctx: CanvasRenderingContext2D) {
+  const S = SILHOUETTE;
+  ctx.save();
+  ctx.beginPath();
+  HEX.forEach(([px, py], i) => (i ? ctx.lineTo(px, py) : ctx.moveTo(px, py)));
+  ctx.closePath();
+  ctx.clip();
+  ctx.fillStyle = S.color;
+  ctx.beginPath();
+  ctx.arc(S.x, S.headY, S.headR, 0, Math.PI * 2);
+  ctx.fill();
+  // Shoulders: a wide rounded dome that runs off the bottom of the hexagon.
+  ctx.beginPath();
+  ctx.moveTo(S.x - S.shoulderW / 2, PHOTO.y + PHOTO.h);
+  ctx.bezierCurveTo(S.x - S.shoulderW / 2, S.shoulderY + 70, S.x - S.shoulderW / 4, S.shoulderY, S.x, S.shoulderY);
+  ctx.bezierCurveTo(S.x + S.shoulderW / 4, S.shoulderY, S.x + S.shoulderW / 2, S.shoulderY + 70, S.x + S.shoulderW / 2, PHOTO.y + PHOTO.h);
+  ctx.closePath();
+  ctx.fill();
+  ctx.restore();
+}
+
 export function drawCard(
   canvas: HTMLCanvasElement,
   background: CanvasImageSource,
@@ -180,11 +205,7 @@ export function drawCard(
     ctx.drawImage(image, cx - (width * s) / 2, cy - (height * s) / 2, width * s, height * s);
     ctx.restore();
   } else if (placeholders) {
-    ctx.fillStyle = "rgba(0, 12, 120, 0.55)";
-    ctx.font = font(400, 34);
-    ctx.textAlign = "center";
-    ctx.fillText("Your photo", PHOTO.x + PHOTO.w / 2, PHOTO.y + PHOTO.h / 2 + 12);
-    ctx.textAlign = "left";
+    drawSilhouette(ctx);
   }
 
   ctx.fillStyle = INK;
